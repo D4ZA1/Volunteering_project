@@ -16,22 +16,30 @@ for url in urls:
 
     for i in range(len(docs)):
         det = {}
-        response = requests.get('https://indiankanoon.org' + docs[i].get('href'))
+        Url = 'https://indiankanoon.org' + docs[i].get('href')
+        response = requests.get(Url)
         soup = BeautifulSoup(response.content, 'html.parser')
         for link in soup.find_all('div', class_='judgments'):
-            det['Judgment'] = f'{i}_family_court.pdf'
+            det['Judgment'] = f'{i+1}_Income_tax.pdf'
             det['Domain'] = 'Family Court'
             if link.find('h3', class_="doc_citations"):
                 det['Equivalent Citation'] = link.find('h3', class_="doc_citations").get_text()
             else:
                 det['Citation'] = ''
             det['Name'] = link.find('h2', class_='doc_title').get_text()
-            det['Author'] = link.find('h3', class_='doc_author').get_text()
-            det['Bench'] = link.find('h3', class_='doc_bench').get_text()
+            if link.find('h3', class_='doc_author'):
+                det['Author'] = link.find('h3', class_='doc_author').get_text()
+            else:
+                det['Author'] = ''
+            if link.find('h3', class_='doc_bench'):
+                det['Bench'] = link.find('h3', class_='doc_bench').get_text()
+            else:
+                det['Bench'] = ''
             det['Court'] = link.find('h2', class_='docsource_main').get_text()
-            det['link'] = 'https://indiankanoon.org' + docs[i].get('href')
+            det['link'] = Url
+
         Details.append(det)
 print(len(Details))
 # save the data in an excel file
-# df = pd.DataFrame(Details)
-# df.to_excel('Family_Court.xlsx')
+df = pd.DataFrame(Details)
+df.to_excel('income_tax.xlsx')
