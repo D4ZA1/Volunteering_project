@@ -25,7 +25,7 @@ for url in urls:
             if link.find('h3', class_="doc_citations"):
                 det['Equivalent Citation'] = link.find('h3', class_="doc_citations").get_text()
             else:
-                det['Citation'] = ''
+                det['Equivalent Citation'] = ''
             det['Name'] = link.find('h2', class_='doc_title').get_text()
             if link.find('h3', class_='doc_author'):
                 det['Author'] = link.find('h3', class_='doc_author').get_text()
